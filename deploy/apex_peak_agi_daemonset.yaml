@@ -1,0 +1,116 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: apex-peak-agi
+  namespace: apex-system
+  labels:
+    app.kubernetes.io/name: apex-peak-agi
+    app.kubernetes.io/part-of: hgst-substrate
+spec:
+  selector:
+    matchLabels:
+      app: apex-peak-agi
+  template:
+    metadata:
+      labels:
+        app: apex-peak-agi
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9090"
+        prometheus.io/path: "/metrics"
+    spec:
+      hostPID: true
+      hostIPC: true
+      hostNetwork: true
+      tolerations:
+      - operator: Exists
+      containers:
+      - name: substrate-runtime
+        image: rcfabrications/hgst-engine:latest
+        imagePullPolicy: IfNotPresent
+        securityContext:
+          privileged: true
+          capabilities:
+            add:
+            - SYS_ADMIN
+            - SYS_PTRACE
+            - NET_ADMIN
+            - IPC_LOCK
+        command:
+        - /usr/local/bin/python3
+        - /opt/hgst/integrated_hgst_substrate.py
+        env:
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: HOST_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: CONTROLLER_0_IP
+          value: "10.240.0.10"
+        - name: CONTROLLER_1_IP
+          value: "10.240.0.11"
+        - name: CONTROLLER_2_IP
+          value: "10.240.0.12"
+        - name: LIVE_HYPERVISOR_EXECUTION
+          value: "true"
+        - name: SOVEREIGN_RADIUS
+          value: "3.0"
+        - name: PROMETHEUS_PORT
+          value: "9090"
+        ports:
+        - containerPort: 9090
+          name: metrics
+          protocol: TCP
+        volumeMounts:
+        - name: dev-mem
+          mountPath: /dev/mem
+        - name: sys-firmware
+          mountPath: /sys/firmware
+        - name: dev-ap
+          mountPath: /dev/ap
+        - name: sys-kernel-debug
+          mountPath: /sys/kernel/debug
+        - name: bpf-fs
+          mountPath: /sys/fs/bpf
+        resources:
+          limits:
+            cpu: "4"
+            memory: 8Gi
+          requests:
+            cpu: "2"
+            memory: 2Gi
+      volumes:
+      - name: dev-mem
+        hostPath:
+          path: /dev/mem
+      - name: sys-firmware
+        hostPath:
+          path: /sys/firmware
+      - name: dev-ap
+        hostPath:
+          path: /dev/ap
+      - name: sys-kernel-debug
+        hostPath:
+          path: /sys/kernel/debug
+      - name: bpf-fs
+        hostPath:
+          path: /sys/fs/bpf
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: apex-substrate-telemetry
+  namespace: apex-system
+  labels:
+    app: apex-peak-agi
+spec:
+  type: ClusterIP
+  ports:
+  - port: 9090
+    targetPort: 9090
+    name: metrics
+  selector:
+    app: apex-peak-agi

@@ -1,0 +1,68 @@
+{
+  "annotations": { "list": [] },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "liveNow": true,
+  "panels": [
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 0 },
+      "id": 1,
+      "title": "Substrate Sovereign State",
+      "type": "row"
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "max": 3.5,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "yellow", "value": 2.85 },
+              { "color": "red", "value": 3 }
+            ]
+          },
+          "unit": "none"
+        }
+      },
+      "gridPos": { "h": 8, "w": 8, "x": 0, "y": 1 },
+      "id": 2,
+      "title": "Sovereign Anchor Norm (||z|| <= 3.0)",
+      "type": "gauge",
+      "targets": [{ "expr": "apex_substrate_latent_norm", "legendFormat": "||z||" }]
+    },
+    {
+      "datasource": "Prometheus",
+      "gridPos": { "h": 8, "w": 8, "x": 8, "y": 1 },
+      "id": 3,
+      "title": "Topological Entropy (bits)",
+      "type": "timeseries",
+      "targets": [{ "expr": "apex_substrate_topological_entropy_bits", "legendFormat": "Entropy" }]
+    },
+    {
+      "datasource": "Prometheus",
+      "gridPos": { "h": 8, "w": 8, "x": 16, "y": 1 },
+      "id": 4,
+      "title": "Möbius Holonomy Phase & Associator Tension",
+      "type": "timeseries",
+      "targets": [
+        { "expr": "apex_substrate_mobius_phase_rad", "legendFormat": "Möbius Phase" },
+        { "expr": "apex_substrate_associator_tension", "legendFormat": "Associator" }
+      ]
+    }
+  ],
+  "refresh": "1s",
+  "schemaVersion": 38,
+  "style": "dark",
+  "tags": ["apex", "hgst", "sovereignty"],
+  "time": { "from": "now-15m", "to": "now" },
+  "title": "APEX Peak AGI Substrate Telemetry",
+  "uid": "apex-substrate-01"
+}
