@@ -1,0 +1,27 @@
+name: Deploy HGST Substrate to Cluster
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'deploy/**'
+      - 'hgst/**'
+  workflow_dispatch:
+
+jobs:
+  deploy-substrate:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Environment
+        run: |
+          echo "Executing on runner host: $(hostname)"
+          which kubectl || true
+
+      - name: Apply Substrate Kubernetes Manifests
+        run: |
+          kubectl apply -f deploy/apex_peak_agi_daemonset.yaml
+          kubectl rollout status daemonset/apex-peak-agi -n apex-system --timeout=120s || true
