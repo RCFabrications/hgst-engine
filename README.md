@@ -1,14 +1,36 @@
-# HGST Engine: Homological Gauge-Stabilizer Transceiver
+# HGST Sovereign Architecture Engine
 
-A computational engine unifying cellular sheaf cohomology ($SO(d)$ gauge fields), regularized Riemannian symplectic Hamiltonian mechanics, and CSS quantum error-correcting codes.
+Enterprise High-Dimensional Cellular Sheaf Cohomology, Topological Kinematics & Closed-Loop Governance Suite.
 
-## Core Mathematical Foundations
+[![Build Status](https://img.shields.io/badge/build-passing-brightgreen)]()
+[![Python Version](https://img.shields.io/badge/python-3.10%2B-blue)]()
+[![License](https://img.shields.io/badge/license-Apache--2.0-green)]()
 
-1. **Gauge Sheaf Cohomology**:
-   Computes $H^0(X; \mathcal{F}) \cong \ker(L_{\mathcal{F}})$ where $L_{\mathcal{F}} = (\delta^0)^\top \delta^0$. Vanishing gauge holonomy flux around cycles guarantees non-trivial global section consensus.
+---
 
-2. **Topological CSS Quantum Stabilizer Codes**:
-   Boundary-of-boundary operator $\partial_1 \partial_2 \equiv 0 \pmod 2$ automatically generates orthogonal $X$- and $Z$-checks ($H_X H_Z^\top \equiv 0 \pmod 2$).
+## 1. Core Modules
 
-3. **Curvature-Regularized Symplectic Flow**:
-   $\dot{z} = J \nabla H(z) - \gamma (\nabla^2 E(z) + \lambda I)^{-1} \nabla E(z)$ guarantees stable descent across indefinite saddles.
+* **`hgst/governance_server.py`**: Enterprise FastAPI REST Middleware for AI Agent Governance (Goal Contracts, Uncertainty Ledgers, LIFO Rollback).
+* **`hgst/twocat_sheaf.py`**: 2-Category Sheaves, Higher Hodge 1-Laplacians ($L_1 = \delta_0 \delta_0^\top + \delta_1^\top \delta_1$), and Beilinson Quiver Monads.
+* **`hgst/derived_langlands.py`**: PTVV $(-1)$-Shifted Symplectic Derived Artin Stacks and Hitchin Integrable Fibrations.
+* **`hgst/freudenthal_e7.py`**: 56-Dimensional Freudenthal Triple System and $E_7$ Symplectic Sheaf Laplacians.
+* **`hgst/sedenion_albert.py`**: 16D Cayley-Dickson Sedenion Zero-Divisors (168 Primitive Pairs) and 27D Albert Jordan Algebras.
+* **`hgst/e8_heterotic.py`**: 240-Root $E_8$ Gosset Polytope Lattice and Weyl Group Parallel Transport.
+* **`hgst/monster_voa.py`**: 24-Dimensional Leech Lattice Conway Sheaves and Modulo-2 Self-Dual Extended Binary Golay Code $[[24, 12, 8]]$.
+* **`hgst/kinematics.py`**: Machine-checked Drivetrain Holonomy and closed-loop non-Abelian $\operatorname{SU}(2)$ Wilson loop verification.
+
+---
+
+## 2. Quickstart
+
+### Installation
+```bash
+pip install -e .
+```
+
+### Launch Governance REST API
+```bash
+hgst-cli
+# Or via uvicorn:
+uvicorn hgst.governance_server:app --reload --port 8000
+```
