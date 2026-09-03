@@ -10,8 +10,9 @@ class MonsterVOATransceiver:
         self.build_golay_generator()
 
     def build_golay_generator(self):
-        b_row = [0, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0]
-        B11 = la.circulant(b_row)
+        # Exact Pless / MacWilliams Construction of [[24, 12, 8]] Self-Dual Golay Code
+        p_row = [1, 1, 0, 1, 1, 1, 0, 0, 0, 1, 0] # Quadratic residues mod 11
+        B11 = la.circulant(p_row)
         B12 = np.zeros((12, 12), dtype=int)
         B12[0, 1:] = 1; B12[1:, 0] = 1; B12[1:, 1:] = B11
         self.G24 = np.hstack([np.eye(12, dtype=int), B12]) % 2
