@@ -7,10 +7,32 @@ on:
     paths:
       - 'deploy/**'
       - 'hgst/**'
+      - 'Dockerfile'
+      - '.github/workflows/**'
   workflow_dispatch:
+    inputs:
+      image_tag:
+        description: 'Specific image tag to deploy'
+        required: false
+        default: 'latest'
 
 jobs:
+  test-and-verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      - name: Install dependencies
+        run: pip install -e .
+      - name: Run verification tests
+        run: python -m unittest discover -s tests -v
+      - name: Check native ABI
+        run: make -C hgst check-abi
+
   deploy-substrate:
+    needs: test-and-verify
     runs-on: self-hosted
     steps:
       - name: Checkout Code
@@ -19,9 +41,9 @@ jobs:
       - name: Setup Environment
         run: |
           echo "Executing on runner host: $(hostname)"
-          which kubectl || true
+          which kubectl || exit 1
 
       - name: Apply Substrate Kubernetes Manifests
         run: |
           kubectl apply -f deploy/apex_peak_agi_daemonset.yaml
-          kubectl rollout status daemonset/apex-peak-agi -n apex-system --timeout=120s || true
+          kubectl rollout status daemonset/apex-peak-agi -n apex-system --timeout=120s
