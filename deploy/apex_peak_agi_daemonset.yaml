@@ -37,8 +37,9 @@ spec:
             - NET_ADMIN
             - IPC_LOCK
         command:
-        - /usr/local/bin/python3
-        - /opt/hgst/integrated_hgst_substrate.py
+        - python3
+        - -m
+        - hgst.apex_substrate_daemon
         env:
         - name: NODE_NAME
           valueFrom:
@@ -48,16 +49,8 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: status.hostIP
-        - name: CONTROLLER_0_IP
-          value: "10.240.0.10"
-        - name: CONTROLLER_1_IP
-          value: "10.240.0.11"
-        - name: CONTROLLER_2_IP
-          value: "10.240.0.12"
-        - name: LIVE_HYPERVISOR_EXECUTION
-          value: "true"
-        - name: SOVEREIGN_RADIUS
-          value: "3.0"
+        - name: HGST_NATIVE_LIBRARY
+          value: "/app/hgst/libhgst_runtime.so"
         - name: PROMETHEUS_PORT
           value: "9090"
         ports:
